@@ -1,0 +1,10 @@
+genl :: syntactic
+
+gent :: typed
+
+type? :: checker
+
+sound :: gent ; type? low probability
+discard :: genl ; type?
+
+complete :: genl ; type == gent ; type
