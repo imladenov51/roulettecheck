@@ -1,12 +1,26 @@
 #lang roulette/example/disrupt
 
-(provide choose) 
+(require (only-in "racket.rkt" choose-sample flip-sample))
 
-(define (choose m M)
-  (when (> m M)
-    (error 'choose "lower bound should be <= upper bound"))
-  (λ (_size)
-    (make-categorical
-    (for/list ([k (in-inclusive-range m M)])
-;        (cons k (/ 1.0 (add1 (- M m))))))))
-        (cons k (/ 1 (add1 (- M m))))))))
+(provide choose-val flip-val
+         current-generator-mode)
+
+(define current-generator-mode
+  (make-parameter 'symbolic))
+
+(define (choose-symb m M)
+  (make-categorical
+   (for/list ([k (in-inclusive-range m M)])
+     (cons k (/ 1 (add1 (- M m)))))))
+
+(define flip-symb flip)
+
+(define (choose-val m M)
+  (if (eq? (current-generator-mode) 'sample)
+      (choose-sample m M)
+      (choose-symb m M)))
+
+(define (flip-val p)
+  (if (eq? (current-generator-mode) 'sample)
+      (flip-sample p)
+      (flip-symb p)))
